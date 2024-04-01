@@ -1,0 +1,47 @@
+spring:
+  application:
+    name: cloud-consumer-feign-order
+  cloud:
+    consul:
+      host: localhost
+      port: 8500
+      discovery:
+        service-name: ${spring.application.name}
+        # 优先使用ip地址访问
+        prefer-ip-address: true
+      config:
+        profile-separator: '-'
+        format: yaml
+        watch:
+          wait-time: 1
+    openfeign:
+      # 请求和响应的压缩
+      compression:
+        request:
+          enabled: true
+          # 最小压缩字节数
+          min-request-size: 2048
+          # 压缩类型
+          mime-types: text/xml,application/xml,application/json
+        response:
+          enabled: true
+      httpclient:
+        hc5:
+          # 开启HTTP5
+          enabled: true
+      client:
+        config:
+          # 为所有的微服务配置超时时间
+          default:
+            connectTimeout: 5000
+            readTimeout: 5000
+            loggerLevel: full
+          # 为指定的微服务配置超时时间（会覆盖全局配置）
+          cloud-payment-service:
+            connectTimeout: 3000
+            readTimeout: 3000
+            loggerLevel: full
+logging:
+  level:
+    # 设置Feign接口日志级别
+    com.alpharion.api.PaymentApi: info

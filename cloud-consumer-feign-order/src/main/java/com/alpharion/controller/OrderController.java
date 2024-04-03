@@ -39,7 +39,7 @@ public class OrderController {
 
     @RequestMapping(value = "/get/{id}", name = "获取订单")
     public R<?> get(@PathVariable("id") Integer id) {
-        // 获取订单A
+        // 获取订单D
         return paymentApi.getPay(id);
     }
 

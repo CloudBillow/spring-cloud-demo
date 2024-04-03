@@ -50,6 +50,15 @@ public class PayController {
     @PostMapping(value = "/get/{id}", name = "获取支付")
     public R<PayDTO> getPay(@PathVariable("id") Integer id) {
         System.out.println(consulConfig.getAlpharionInfo());
+        Pay pay = payService.getById(id);
+        PayDTO payDTO = new PayDTO();
+        BeanUtils.copyProperties(pay, payDTO);
+        return R.success("成功获取数据", payDTO);
+    }
+
+    @PostMapping(value = "/get/fail/{id}", name = "获取支付失败")
+    public R<PayDTO> getPayFail(@PathVariable("id") Integer id) {
+        System.out.println(consulConfig.getAlpharionInfo());
         try {
             // 测试Feign的默认超时时间
             TimeUnit.SECONDS.sleep(62);

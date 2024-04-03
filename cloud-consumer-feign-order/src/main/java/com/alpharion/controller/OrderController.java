@@ -39,10 +39,15 @@ public class OrderController {
 
     @RequestMapping(value = "/get/{id}", name = "获取订单")
     public R<?> get(@PathVariable("id") Integer id) {
+        return paymentApi.getPay(id);
+    }
+
+    @RequestMapping(value = "/get/fail/{id}", name = "获取订单")
+    public R<?> getFail(@PathVariable("id") Integer id) {
         R<PayDTO> pay;
         try {
             System.out.println("开始获取订单:" + DateUtil.now());
-            pay = paymentApi.getPay(id);
+            pay = paymentApi.getPayFail(id);
         } catch (Exception e) {
             log.error("获取订单异常", e);
             return R.fail(ReturnCODE.RC500.getCode(), "获取订单异常");

@@ -28,4 +28,7 @@ public interface PaymentApi {
     @PostMapping(value = "/pay/get/{id}", name = "获取支付")
     R<PayDTO> getPay(@PathVariable("id") Integer id);
 
+    @PostMapping(value = "/pay/get/fail/{id}", name = "获取支付失败")
+    R<PayDTO> getPayFail(@PathVariable("id") Integer id);
+
 }

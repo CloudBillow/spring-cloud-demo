@@ -1,7 +1,3 @@
 .idea
 *.iml
-cloud-common/target
-cloud-consumer-feign-order/target
-cloud-consumer-order/target
-cloud-provider-payment/target
-cloud-provider-payment-backup/target/
+target/

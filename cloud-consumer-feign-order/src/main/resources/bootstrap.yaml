@@ -38,9 +38,66 @@ spring:
             loggerLevel: full
           # 为指定的微服务配置超时时间（会覆盖全局配置）
           cloud-payment-service:
-            connectTimeout: 3000
-            readTimeout: 3000
-            loggerLevel: full
+            connectTimeout: 20000
+            readTimeout: 20000
+      circuitbreaker:
+        # 是否要开启断路器
+        enabled: true
+        group:
+          # 没开分组永远不用分组的配置
+          enabled: true
+
+resilience4j:
+  timelimiter:
+    configs:
+      default:
+        # 超时时间
+        timeout-duration: 10s
+  circuitbreaker:
+    configs:
+      # 按次数的配置
+      count-based:
+        # 设置断路器的失败率阈值(50%)
+        failure-rate-threshold: 50
+        # 滑动窗口类型
+        sliding-window-type: COUNT_BASED
+        # 滑动窗口大小
+        sliding-window-size: 6
+        # 滑动窗口的桶数
+        minimum-number-of-calls: 6
+        # 是否启用自动从开启状态转换到半开启状态
+        automatic-transition-from-open-to-half-open-enabled: true
+        # 从开启状态转换到半开启状态的等待时间
+        wait-duration-in-open-state: 5s
+        # 半开启状态下的环形缓冲区大小
+        permitted-number-of-calls-in-half-open-state: 2
+        record-exceptions:
+          - java.lang.Exception
+      # 按时间的配置
+      time-based:
+        # 设置断路器的失败率阈值(50%)
+        failure-rate-threshold: 50
+        # 慢调用时间阈值
+        slow-call-duration-threshold: 2s
+        # 慢调用百分比峰值
+        slow-call-rate-threshold: 30
+        # 滑动窗口类型
+        sliding-window-type: TIME_BASED
+        # 滑动窗口大小
+        sliding-window-size: 2
+        # 断路器计算失败率或慢调用率的最小样本数
+        minimum-number-of-calls: 2
+        # 半开启状态下的环形缓冲区大小
+        permitted-number-of-calls-in-half-open-state: 2
+        # 从开启状态转换到半开启状态的等待时间
+        wait-duration-in-open-state: 5s
+        record-exceptions:
+          - java.lang.Exception
+    instances:
+      cloud-payment-service:
+        # 使用上面的default配置
+        baseConfig: count-based
+
 logging:
   level:
     # 设置Feign接口日志级别

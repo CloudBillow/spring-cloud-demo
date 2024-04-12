@@ -32,7 +32,10 @@ public interface PaymentApi {
     @PostMapping(value = "/pay/get/fail/{id}", name = "获取支付失败")
     R<PayDTO> getPayFail(@PathVariable("id") Integer id);
 
-    @GetMapping(value = "/pay/circuit/{id}", name = "支付熔断")
+    @GetMapping(value = "/pay/resilience4j/circuit/{id}", name = "支付熔断")
     R<String> circuit(@PathVariable("id") Integer id);
+
+    @GetMapping(value = "/pay/resilience4j/bulkhead/{id}", name = "支付隔离")
+    R<String> bulkhead(@PathVariable("id") Integer id);
 
 }

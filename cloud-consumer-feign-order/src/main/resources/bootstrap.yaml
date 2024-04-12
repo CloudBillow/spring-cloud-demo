@@ -43,16 +43,17 @@ spring:
       circuitbreaker:
         # 是否要开启断路器
         enabled: true
-        group:
-          # 没开分组永远不用分组的配置
-          enabled: true
+#        group:
+#          # 没开分组永远不用分组的配置
+#          enabled: true
 
 resilience4j:
   timelimiter:
     configs:
       default:
         # 超时时间
-        timeout-duration: 10s
+        timeout-duration: 20s
+  ######### 断路器配置 #########
   circuitbreaker:
     configs:
       # 按次数的配置
@@ -96,8 +97,32 @@ resilience4j:
     instances:
       cloud-payment-service:
         # 使用上面的default配置
-        baseConfig: count-based
-
+        base-config: count-based
+  ######### 隔离配置 #########
+  bulkhead:
+    configs:
+      default:
+        # 最大并发数
+        max-concurrent-calls: 2
+        # 阻塞时间
+        max-wait-duration: 1s
+    instances:
+      cloud-payment-service:
+        # 使用上面的default配置
+        baseConfig: default
+  thread-pool-bulkhead:
+    configs:
+      default:
+        # 最大线程数
+        max-thread-pool-size: 1
+        # 核心线程数
+        core-thread-pool-size: 1
+        # 队列大小
+        queue-capacity: 1
+    instances:
+      cloud-payment-service:
+        # 使用上面的default配置
+        base-config: default
 logging:
   level:
     # 设置Feign接口日志级别

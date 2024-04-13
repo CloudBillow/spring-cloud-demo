@@ -41,4 +41,7 @@ public interface PaymentApi {
     @GetMapping(value = "/pay/resilience4j/rate-limit/{id}", name = "支付限流")
     R<String> rateLimit(@PathVariable("id") Integer id);
 
+    @GetMapping(value = "/pay/micrometer/{id}", name = "支付链路监控")
+    R<String> micrometer(@PathVariable("id") Integer id);
+
 }

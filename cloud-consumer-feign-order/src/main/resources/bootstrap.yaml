@@ -137,6 +137,17 @@ resilience4j:
       cloud-payment-service:
         # 使用上面的default配置
         base-config: default
+
+# Zipkin
+management:
+  zipkin:
+    tracing:
+      endpoint: http://localhost:9411/api/v2/spans
+  tracing:
+    sampling:
+      # 采样率，值为0-1之间，1表示全部采集
+      probability: 1.0
+
 logging:
   level:
     # 设置Feign接口日志级别

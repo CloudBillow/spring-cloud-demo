@@ -36,6 +36,10 @@
         <mapper.version>4.2.3</mapper.version>
         <fastjson2.version>2.0.40</fastjson2.version>
         <persistence-api.version>1.0.2</persistence-api.version>
+        <micrometer-tracing.version>1.2.0</micrometer-tracing.version>
+        <micrometer-observation.version>1.12.0</micrometer-observation.version>
+        <feign-micrometer.version>12.5</feign-micrometer.version>
+        <zipkin-reporter-brave.version>2.17.0</zipkin-reporter-brave.version>
     </properties>
 
     <dependencyManagement>
@@ -130,6 +134,44 @@
                 <groupId>org.projectlombok</groupId>
                 <artifactId>lombok</artifactId>
                 <version>${lombok.version}</version>
+            </dependency>
+            <!-- Micrometer-tracing-bom: 门面工具 -->
+            <dependency>
+                <groupId>io.micrometer</groupId>
+                <artifactId>micrometer-tracing-bom</artifactId>
+                <version>${micrometer-tracing.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+            <!-- 指标追踪，产生链路信息 -->
+            <dependency>
+                <groupId>io.micrometer</groupId>
+                <artifactId>micrometer-tracing</artifactId>
+                <version>${micrometer-tracing.version}</version>
+            </dependency>
+            <!-- 追踪与收集 -->
+            <dependency>
+                <groupId>io.micrometer</groupId>
+                <artifactId>micrometer-tracing-bridge-brave</artifactId>
+                <version>${micrometer-tracing.version}</version>
+            </dependency>
+            <!-- 链路观测模块 -->
+            <dependency>
+                <groupId>io.micrometer</groupId>
+                <artifactId>micrometer-observation</artifactId>
+                <version>${micrometer-observation.version}</version>
+            </dependency>
+            <!-- 链路与Feign整合 -->
+            <dependency>
+                <groupId>io.github.openfeign</groupId>
+                <artifactId>feign-micrometer</artifactId>
+                <version>${feign-micrometer.version}</version>
+            </dependency>
+            <!-- 链路可视化 -->
+            <dependency>
+                <groupId>io.zipkin.reporter2</groupId>
+                <artifactId>zipkin-reporter-brave</artifactId>
+                <version>${zipkin-reporter-brave.version}</version>
             </dependency>
         </dependencies>
     </dependencyManagement>

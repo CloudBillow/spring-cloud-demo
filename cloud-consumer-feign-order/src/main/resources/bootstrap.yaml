@@ -109,7 +109,7 @@ resilience4j:
     instances:
       cloud-payment-service:
         # 使用上面的default配置
-        baseConfig: default
+        base-config: default
   thread-pool-bulkhead:
     configs:
       default:
@@ -119,6 +119,20 @@ resilience4j:
         core-thread-pool-size: 1
         # 队列大小
         queue-capacity: 1
+    instances:
+      cloud-payment-service:
+        # 使用上面的default配置
+        base-config: default
+  ######## 限流配置 #########
+  ratelimiter:
+    configs:
+      default:
+        # 在一次刷新周期内，允许执行的最大请求数
+        limit-for-period: 3
+        # 限流器刷新间隔（s）
+        limit-refresh-period: 3s
+        # 线程等待权限的默认等待时间
+        timeout-duration: 10s
     instances:
       cloud-payment-service:
         # 使用上面的default配置

@@ -50,4 +50,9 @@ public class PayResilience4jController {
         }
         return R.success("Hello Bulkhead！id:" + id + " ==> " + IdUtil.simpleUUID());
     }
+
+    @GetMapping(value = "/rate-limit/{id}", name = "支付限流")
+    public R<String> rateLimit(@PathVariable("id") Integer id) {
+        return R.success("Hello RateLimit！id:" + id + " ==> " + IdUtil.simpleUUID());
+    }
 }

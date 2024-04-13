@@ -1,22 +1,22 @@
 package com.alpharion.controller;
 
-import cn.hutool.core.util.RandomUtil;
 import cn.hutool.http.HttpUtil;
 import com.alpharion.api.PaymentApi;
 import com.alpharion.result.R;
 import com.alpharion.result.ReturnCODE;
 import io.github.resilience4j.bulkhead.annotation.Bulkhead;
 import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
+import io.github.resilience4j.ratelimiter.annotation.RateLimiter;
 import jakarta.annotation.Resource;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.TimeUnit;
+import java.util.stream.IntStream;
 
 /**
  * 订单熔断Controller
@@ -78,24 +78,32 @@ public class OrderResilience4jController {
                 R.fail(ReturnCODE.RC500.getCode(), "[myBulkheadFallback] 系统繁忙请稍后重试：" + e.getMessage() + " id:" + id));
     }
 
+
+    /* ===================================== 限流 ===================================== */
+
+    @GetMapping(value = "/rate-limiter/{id}", name = "支付限流")
+    @RateLimiter(name = "cloud-payment-service", fallbackMethod = "myRateLimiterFallback")
+    public R<String> rateLimiter(@PathVariable("id") Integer id) {
+        return paymentApi.rateLimit(id);
+    }
+
+    /**
+     * 限流服务降级方法
+     */
+    @SuppressWarnings("unused")
+    public R<String> myRateLimiterFallback(Integer id, Throwable e) {
+        return R.fail(ReturnCODE.RC500.getCode(), "[myRateLimiterFallback] 系统繁忙请稍后重试：" + e.getMessage() + " id:" + id);
+    }
+
+
     public static void main(String[] args) {
-        List<CompletableFuture<Void>> list = new ArrayList<>();
-        for (int i = 0; i < 3; i++) {
-            CompletableFuture<Void> run = CompletableFuture.runAsync(() -> {
-                try {
-                    TimeUnit.MILLISECONDS.sleep(RandomUtil.randomInt(500,2000));
-                } catch (InterruptedException e) {
-                    throw new RuntimeException(e);
-                }
-                String s = HttpUtil.get("http://localhost/order/resilience4j/pay/bulkhead/thread-pool/1");
-                System.out.println("s = " + s);
-            });
-            list.add(run);
-        }
+        List<CompletableFuture<Void>> futures = IntStream.range(0, 5)
+                .mapToObj(i -> CompletableFuture.runAsync(() -> {
+                    String s = HttpUtil.get("http://localhost/order/resilience4j/pay/rate-limiter/1");
+                    System.out.println("s = " + s);
+                })).toList();
 
-        CompletableFuture.allOf(list.toArray(new CompletableFuture[0])).join();
-
-
+        CompletableFuture.allOf(futures.toArray(new CompletableFuture[0])).join();
     }
 
 }

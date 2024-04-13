@@ -38,4 +38,7 @@ public interface PaymentApi {
     @GetMapping(value = "/pay/resilience4j/bulkhead/{id}", name = "支付隔离")
     R<String> bulkhead(@PathVariable("id") Integer id);
 
+    @GetMapping(value = "/pay/resilience4j/rate-limit/{id}", name = "支付限流")
+    R<String> rateLimit(@PathVariable("id") Integer id);
+
 }

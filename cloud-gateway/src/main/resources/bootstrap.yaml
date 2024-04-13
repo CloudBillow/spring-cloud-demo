@@ -12,10 +12,13 @@ spring:
     gateway:
       routes:
         - id: pay_route1
-          uri: http://localhost:8001
+#          uri: http://localhost:8001
+          # 使用服务名访问（lb：负载均衡）
+          uri: lb://cloud-payment-service
           predicates:
             - Path=/pay/gateway/get/**
         - id: pay_route2
+          # 使用ip地址访问
           uri: http://localhost:8001
           predicates:
             - Path=/pay/gateway/info/**

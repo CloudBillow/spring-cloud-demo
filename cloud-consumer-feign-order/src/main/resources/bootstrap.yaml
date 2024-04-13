@@ -152,3 +152,4 @@ logging:
   level:
     # 设置Feign接口日志级别
     com.alpharion.api.PaymentApi: info
+    com.alpharion.api.PaymentGatewayApi: info

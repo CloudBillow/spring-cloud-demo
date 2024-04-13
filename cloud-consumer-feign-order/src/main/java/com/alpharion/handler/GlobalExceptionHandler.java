@@ -2,7 +2,9 @@ package com.alpharion.handler;
 
 import com.alpharion.result.BaseException;
 import com.alpharion.result.R;
+import com.alpharion.result.ReturnCODE;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.cloud.client.circuitbreaker.NoFallbackAvailableException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
@@ -23,9 +25,15 @@ public class GlobalExceptionHandler {
         return R.fail(e.getCode(), e.getMessage());
     }
 
-//    @ExceptionHandler(Exception.class)
-//    public R<?> exceptionHandler(Exception e) {
-//        log.error("系统异常", e);
-//        return R.fail(ReturnCODE.RC500.getCode(), e.getMessage());
-//    }
+    @ExceptionHandler(NoFallbackAvailableException.class)
+    public R<?> noFallbackAvailableExceptionHandler(NoFallbackAvailableException e) {
+        log.error("服务降级", e);
+        return R.fail(ReturnCODE.RC500.getCode(), e.getCause().getCause().getMessage());
+    }
+
+    @ExceptionHandler(Exception.class)
+    public R<?> exceptionHandler(Exception e) {
+        log.error("系统异常", e);
+        return R.fail(ReturnCODE.RC500.getCode(), e.getMessage());
+    }
 }

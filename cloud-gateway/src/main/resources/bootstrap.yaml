@@ -9,3 +9,13 @@ spring:
         service-name: ${spring.application.name}
         # 优先使用ip地址访问
         prefer-ip-address: true
+    gateway:
+      routes:
+        - id: pay_route1
+          uri: http://localhost:8001
+          predicates:
+            - Path=/pay/gateway/get/**
+        - id: pay_route2
+          uri: http://localhost:8001
+          predicates:
+            - Path=/pay/gateway/info/**

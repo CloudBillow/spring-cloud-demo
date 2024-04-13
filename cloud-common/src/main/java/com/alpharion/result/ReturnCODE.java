@@ -30,6 +30,11 @@ public enum ReturnCODE {
      */
     TOKEN_INVALID(2001, "Token无效"),
 
+    /**
+     * 资源不存在
+     */
+    RESOURCE_NOT_FOUND(2002, "资源不存在"),
+
     ;
 
     /**

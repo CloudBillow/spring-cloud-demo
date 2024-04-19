@@ -16,7 +16,26 @@ spring:
           # 使用服务名访问（lb：负载均衡）
           uri: lb://cloud-payment-service
           predicates:
+            # Path：路径是这个值才可以访问
             - Path=/pay/gateway/get/**
+            # After：在这个时间之后才可以访问，Before：在这个时间之前才可以访问，Between：在这个时间之间才可以访问
+            - After=2024-04-19T22:58:20.639606+08:00[Asia/Shanghai]
+            # Cookie：cookie中有这个值才可以访问
+            - Cookie=username,miracle
+            # Header：请求头中有这个值才可以访问(其中\d+是正则表达式，表示任意数字)
+            - Header=X-Request-Id, \d+
+            # Host：主机名是这个值才可以访问
+            - Host=**.miracle.com
+            # Method：请求方式是这个值才可以访问
+            - Method=GET
+            # Query：请求参数中有这个值才可以访问
+            - Query=userId, \d+
+            # RemoteAddr：远程地址是这个值才可以访问
+            - RemoteAddr=192.168.31.54/30
+            # 自定义Grade
+            - Grade=A
+
+
         - id: pay_route2
           # 使用ip地址访问
           uri: http://localhost:8001

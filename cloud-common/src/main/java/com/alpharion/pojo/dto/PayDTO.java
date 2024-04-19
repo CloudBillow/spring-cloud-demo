@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.time.ZonedDateTime;
 import java.util.Date;
 
 /**
@@ -19,6 +20,11 @@ import java.util.Date;
 @NoArgsConstructor
 @AllArgsConstructor
 public class PayDTO implements Serializable {
+
+    public static void main(String[] args) {
+        ZonedDateTime now = ZonedDateTime.now();
+        System.out.println(now);
+    }
 
     /**
      * 主键

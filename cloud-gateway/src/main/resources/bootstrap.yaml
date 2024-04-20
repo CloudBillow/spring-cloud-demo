@@ -32,12 +32,27 @@ spring:
             - Query=userId, \d+
             # RemoteAddr：远程地址是这个值才可以访问
             - RemoteAddr=192.168.31.54/30
-            # 自定义Grade
+            # 自定义过滤器Grade
             - Grade=A
-
 
         - id: pay_route2
           # 使用ip地址访问
           uri: http://localhost:8001
           predicates:
             - Path=/pay/gateway/info/**
+
+        - id: pay_route3
+          # 使用服务名访问（lb：负载均衡）
+          uri: lb://cloud-payment-service
+          predicates:
+#            - Path=/pay/gateway/filter
+            # 请求地址去掉了前缀，通过下面的PrefixPath添加前缀
+            - Path=/filter
+          filters:
+            # 添加请求前缀
+            - PrefixPath=/pay/gateway
+            # 在请求头中添加两个值
+            - AddRequestHeader=X-Request-Miracle1, miracle1
+            - AddRequestHeader=X-Request-Miracle2, miracle2
+            # 移除请求头中的一个值
+            - RemoveRequestHeader=X-Request-Miracle1

@@ -56,3 +56,4 @@ spring:
             - AddRequestHeader=X-Request-Miracle2, miracle2
             # 移除请求头中的一个值
             - RemoveRequestHeader=X-Request-Miracle1
+            - MustExistParam=status

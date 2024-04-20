@@ -1,6 +1,7 @@
 package com.alpharion.config.predicate;
 
 import jakarta.validation.constraints.NotNull;
+import lombok.Data;
 import org.springframework.cloud.gateway.handler.predicate.AbstractRoutePredicateFactory;
 import org.springframework.stereotype.Component;
 import org.springframework.validation.annotation.Validated;
@@ -43,18 +44,12 @@ public class GradeRoutePredicateFactory extends AbstractRoutePredicateFactory<Gr
         };
     }
 
+    @Data
     @Validated
     public static class Config {
 
         @NotNull
         private String gradeLevel;
 
-        public String getGradeLevel() {
-            return gradeLevel;
-        }
-
-        public void setGradeLevel(String gradeLevel) {
-            this.gradeLevel = gradeLevel;
-        }
     }
 }

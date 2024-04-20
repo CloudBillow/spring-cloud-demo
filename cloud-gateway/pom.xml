@@ -47,6 +47,10 @@
             <version>${netty-resolver-dns-native-macos.version}</version>
             <classifier>osx-aarch_64</classifier>
         </dependency>
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+        </dependency>
     </dependencies>
 
     <build>
